@@ -43,7 +43,7 @@ namespace SlmCache\Listener;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch;
+use Zend\Router\RouteMatch;
 use Zend\Http\Response;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Cache\StorageFactory;
@@ -70,7 +70,7 @@ class Cache extends AbstractListenerAggregate
     /**
      * {@inheritDoc}
      */
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'matchRoute'));
         $events->attach(MvcEvent::EVENT_FINISH, array($this, 'saveRoute'));
@@ -156,7 +156,7 @@ class Cache extends AbstractListenerAggregate
     protected function fromCache(MvcEvent $e, $match)
     {
         $key    = $this->cache_prefix. $match['route'];
-        $config = $match['config'];
+
         $cache  = $this->getCache($e);
 
         $response = $e->getResponse();
